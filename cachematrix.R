@@ -57,7 +57,8 @@ cacheSolve <- function(x, ...) {
     #
     # Args:
     #   x: The matrix that should be inverted, it is assumed to be square.
-    #   ...: The additional arguments will be sent to the solve call.
+    #   ...: The additional arguments will currently be ignored as the
+    #        cache key currently only is the matrix and not the arguments.
     #
     # Returns:
     #   The inverse of the specificed matrix.
@@ -83,11 +84,10 @@ cacheSolve <- function(x, ...) {
     # Get the matrix to use for the calculation
     matrix <- x$get()
 
-    # This is actually a bit dubious since the cache key doesn't include
-    # any additional parameters so if you send different arguments you will
-    # still get a cache hit from the first one. But I'm assuming that this is
-    # what's wanted.
-    inverse <- solve(matrix, ...)
+    # I'm explicitly not including the ... arguments since it's not part of the
+    # cache key and as I understand the assignment we should only compute the inverse
+    # of the matrix and not need to support other parts of the solve function call.
+    inverse <- solve(matrix)
     
     # Cache the value.
     x$setInverseMatrix(inverse)
